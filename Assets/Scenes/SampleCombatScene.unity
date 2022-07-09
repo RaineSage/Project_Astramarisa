@@ -326,6 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eabf7ce86f18ca42b329ebddd4fdbf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  basicAttack: {fileID: 11400000, guid: 173ca16ba80295f4785d71d9c61edb4c, type: 2}
   playerCharacter: {fileID: 1090119639}
   enemyCharacter: {fileID: 2110819463}
 --- !u!4 &1286639103

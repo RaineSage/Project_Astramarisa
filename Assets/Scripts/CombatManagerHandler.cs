@@ -1,5 +1,6 @@
 using System;
 using CharacterCombatHandlers;
+using ScriptableObjects.Definitions;
 using UnityEngine;
 
 public class CombatManagerHandler : MonoBehaviour
@@ -11,24 +12,23 @@ public class CombatManagerHandler : MonoBehaviour
         None
     }
 
-    private static CombatManagerHandler _instance;
-
-    public static CombatManagerHandler Instance => _instance;
-
-
+    public static CombatManagerHandler Instance { get; private set; }
+    
     private Turn _currentTurn;
     
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
         } 
         else 
         {
-            _instance = this;
+            Instance = this;
         }
     }
+
+    public CombatAction basicAttack;
 
     public GameObject playerCharacter;
     public GameObject enemyCharacter;
@@ -76,7 +76,12 @@ public class CombatManagerHandler : MonoBehaviour
     
     public void BasicAttack(CharacterCombatHandler attacker, CharacterCombatHandler defender)
     {
-        int damage = Math.Max(0, attacker.GetAttack() - defender.GetDefense());
+        Attack(attacker, defender, basicAttack);
+    }
+    
+    public void Attack(CharacterCombatHandler attacker, CharacterCombatHandler defender, CombatAction combatAction)
+    {
+        int damage = Math.Max(0, combatAction.power + attacker.GetAttack() - defender.GetDefense());
         bool defenderIsDead = defender.TakeDamage(damage);
         Debug.Log($"{defender.stats.name} HP is at {defender.GetHp()}/{defender.GetMaxHp()}");
         if (defenderIsDead)

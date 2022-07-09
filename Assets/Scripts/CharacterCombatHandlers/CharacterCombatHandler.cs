@@ -1,5 +1,6 @@
 using System;
 using ScriptableObjects;
+using ScriptableObjects.Definitions;
 using UnityEngine;
 
 namespace CharacterCombatHandlers

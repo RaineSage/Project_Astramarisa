@@ -1,11 +1,11 @@
 using UnityEngine;
 
-namespace ScriptableObjects
+namespace ScriptableObjects.Definitions
 {
     [CreateAssetMenu(fileName = "Stats", menuName = "ScriptableObjects/CharacterStats", order = 1)]
     public class CharacterStats : ScriptableObject
     {
-        public string name;
+        public new string name;
         
         public int maxHp;
         public int maxMp;

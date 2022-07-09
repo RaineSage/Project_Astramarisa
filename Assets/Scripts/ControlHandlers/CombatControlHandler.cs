@@ -1,5 +1,3 @@
-
-using System;
 using CharacterCombatHandlers;
 using UnityEngine;
 using UnityEngine.InputSystem;
