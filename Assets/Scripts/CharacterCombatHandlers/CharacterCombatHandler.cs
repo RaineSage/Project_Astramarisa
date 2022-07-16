@@ -9,7 +9,6 @@ namespace CharacterCombatHandlers
     {
         public CharacterStats stats;
 
-        
         private int _attackModifier;
         private int _defenseModifier;
         
@@ -22,7 +21,7 @@ namespace CharacterCombatHandlers
 
         private void Start()
         {
-            /*We don't want to do this for the player. We likely want to have an additional ScriptableObject that extends CharacterStats to keep track of the player's HP. */
+            /* We don't want to do this for the player. We likely want to have an additional ScriptableObject that extends CharacterStats to keep track of the player's HP. */
             _hp = stats.maxHp;
             _mp = stats.maxMp;
         }
@@ -57,6 +56,11 @@ namespace CharacterCombatHandlers
             }
 
             return isDead;
+        }
+
+        public void Heal(int healAmount)
+        {
+            _hp = Math.Min(GetMaxHp(), healAmount + _hp);
         }
     }
 }

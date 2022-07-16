@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4212ccd1cbeacc741b7f52df93151d43, type: 3}
-  m_Name: BasicAttack
+  m_Name: BasicHeal
   m_EditorClassIdentifier: 
-  power: 0
+  power: 5
   actionType: 1

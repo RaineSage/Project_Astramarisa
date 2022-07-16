@@ -90,6 +90,12 @@ public class CombatManagerHandler : MonoBehaviour
         }
     }
 
+    public void Heal(CharacterCombatHandler healer, CharacterCombatHandler target, CombatAction combatAction)
+    {
+        int healingAmount = combatAction.power;
+        target.Heal(healingAmount);
+    }
+
     public void OnBattleFinished()
     {
         /*PLACEHOLDER*/
