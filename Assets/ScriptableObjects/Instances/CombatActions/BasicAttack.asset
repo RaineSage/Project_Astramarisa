@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BasicAttack
   m_EditorClassIdentifier: 
   power: 0
-  actionType: 1
+  actionType: 0

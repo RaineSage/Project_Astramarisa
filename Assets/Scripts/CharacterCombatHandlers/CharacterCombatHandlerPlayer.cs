@@ -20,7 +20,6 @@ namespace CharacterCombatHandlers
         public void AttackEnemy()
         {
             CombatManagerHandler.Instance.BasicAttack(this, CombatManagerHandler.Instance.EnemyCombatHandler);
-            OnTurnEnd();
         }
         
 

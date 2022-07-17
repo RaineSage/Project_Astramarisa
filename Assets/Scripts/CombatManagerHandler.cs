@@ -94,6 +94,7 @@ public class CombatManagerHandler : MonoBehaviour
     {
         int healingAmount = combatAction.power;
         target.Heal(healingAmount);
+        Debug.Log($"{target.stats.name} HP is at {target.GetHp()}/{target.GetMaxHp()}");
     }
 
     public void OnBattleFinished()
