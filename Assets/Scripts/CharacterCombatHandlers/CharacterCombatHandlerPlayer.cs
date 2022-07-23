@@ -8,6 +8,7 @@ namespace CharacterCombatHandlers
 
         public override void OnTurnBegin()
         {
+            Debug.Log("PLAYER TURN (press space or enter to attack)");
             canAct = true;
         }
 
@@ -19,7 +20,7 @@ namespace CharacterCombatHandlers
 
         public void AttackEnemy()
         {
-            CombatManagerHandler.Instance.BasicAttack(this, CombatManagerHandler.Instance.EnemyCombatHandler);
+            // CombatManagerHandler.Instance.BasicAttack(this, CombatManagerHandler.Instance.EnemyCombatHandler);
         }
         
 
@@ -27,6 +28,11 @@ namespace CharacterCombatHandlers
         {
             /*PLACEHOLDER*/
             Debug.Log("You Died");
+        }
+
+        public override CharacterAllegiance GetAllegiance()
+        {
+            return CharacterAllegiance.Player;
         }
     }
 }
