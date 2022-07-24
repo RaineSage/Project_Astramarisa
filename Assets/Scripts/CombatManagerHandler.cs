@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CharacterCombatHandlers;
 using JetBrains.Annotations;
 using ScriptableObjects.Definitions;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class CombatManagerHandler : MonoBehaviour
 {
@@ -29,23 +31,45 @@ public class CombatManagerHandler : MonoBehaviour
     private const bool StandaloneCombatHandler = true;
 
     public GameObject playerCharacter;
-    public GameObject enemyCharacter;
+    public GameObject[] enemyCharacter;
 
     private void Start()
     {
         if (!StandaloneCombatHandler) return;
 
         CharacterCombatHandler playerCombatHandler = playerCharacter.GetComponent<CharacterCombatHandler>();
-        CharacterCombatHandler enemyCombatHandler = enemyCharacter.GetComponent<CharacterCombatHandler>();
+        CharacterCombatHandler[] enemyCombatHandlers = enemyCharacter
+            .Select(enemyObject => enemyObject.GetComponent<CharacterCombatHandler>()).ToArray();
 
-        BeginCombat(playerCombatHandler, new[] {enemyCombatHandler});
+        BeginCombat(playerCombatHandler, enemyCombatHandlers);
+    }
+
+    private int TurnOrderFunction(CharacterCombatHandler c1, CharacterCombatHandler c2)
+    {
+        int compareResult = c2.GetSpeed().CompareTo(c1.GetSpeed());
+        if (compareResult != 0)
+        {
+            return compareResult;
+        }
+
+        if (IsMainPlayerCharacter(c1))
+        {
+            return -1;
+        }
+
+        if (IsMainPlayerCharacter(c2))
+        {
+            return 1;
+        }
+
+        return compareResult;
     }
 
     public void BeginCombat(CharacterCombatHandler playerCombatHandler, CharacterCombatHandler[] enemyCombatHandlers)
     {
         _combatHandlers.AddRange(enemyCombatHandlers);
         _combatHandlers.Add(playerCombatHandler);
-        _combatHandlers.Sort((c1, c2) => c2.GetSpeed().CompareTo(c1.GetSpeed()));
+        _combatHandlers.Sort(TurnOrderFunction);
 
         _combatHandlers[_turnIndex].OnTurnBegin();
     }
@@ -56,7 +80,7 @@ public class CombatManagerHandler : MonoBehaviour
         {
             _turnIndex = (_turnIndex + 1) % _combatHandlers.Count;
         } while (_combatHandlers[_turnIndex].IsDead());
-        
+
         _combatHandlers[_turnIndex].OnTurnBegin();
     }
 
@@ -72,7 +96,14 @@ public class CombatManagerHandler : MonoBehaviour
         Debug.Log($"{defender.stats.name} HP is at {defender.GetHp()}/{defender.GetMaxHp()}");
         if (defenderIsDead)
         {
-            OnBattleFinished();
+            if (GetMainPlayerCharacter().IsDead())
+            {
+                OnGameOver();
+            }
+            else if (GetEnemyCharacters().Count == 0)
+            {
+                OnPlayerVictory();
+            }
         }
     }
 
@@ -83,16 +114,28 @@ public class CombatManagerHandler : MonoBehaviour
         Debug.Log($"{target.stats.name} HP is at {target.GetHp()}/{target.GetMaxHp()}");
     }
 
-    public void OnBattleFinished()
+    public void OnPlayerVictory()
     {
         /*PLACEHOLDER*/
-        Debug.Log("Battle Finished");
+        Debug.Log("You Won!");
         Destroy(this.gameObject);
+    }
+
+    public void OnGameOver()
+    {
+        /*PLACEHOLDER*/
+        Debug.Log("Game Over");
+        Destroy(this.gameObject);
+    }
+
+    public static bool IsMainPlayerCharacter(CharacterCombatHandler characterCombatHandler)
+    {
+        return characterCombatHandler.GetAllegiance() == CharacterCombatHandler.CharacterAllegiance.Player;
     }
 
     public CharacterCombatHandler GetMainPlayerCharacter()
     {
-        return _combatHandlers.FindLast(c => c.GetAllegiance() == CharacterCombatHandler.CharacterAllegiance.Player);
+        return _combatHandlers.FindLast(IsMainPlayerCharacter);
     }
 
     [ItemCanBeNull]
@@ -100,9 +143,10 @@ public class CombatManagerHandler : MonoBehaviour
     {
         return GetEnemyCharacters(false);
     }
-    
+
     public List<CharacterCombatHandler> GetEnemyCharacters(bool findDead)
     {
-        return _combatHandlers.FindAll(c => c.GetAllegiance() == CharacterCombatHandler.CharacterAllegiance.Enemy && c.IsDead() == findDead);
+        return _combatHandlers.FindAll(c =>
+            c.GetAllegiance() == CharacterCombatHandler.CharacterAllegiance.Enemy && c.IsDead() == findDead);
     }
 }

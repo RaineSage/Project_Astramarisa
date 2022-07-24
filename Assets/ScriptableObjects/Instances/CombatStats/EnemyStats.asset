@@ -15,9 +15,6 @@ MonoBehaviour:
   name: Enemy
   maxHp: 10
   maxMp: 0
-  hp: 0
-  mp: 0
   baseAttack: 3
   baseDefense: 1
-  attackModifier: 0
-  defenseModifier: 0
+  baseSpeed: 10

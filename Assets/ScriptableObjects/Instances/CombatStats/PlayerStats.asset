@@ -15,9 +15,6 @@ MonoBehaviour:
   name: Player
   maxHp: 20
   maxMp: 20
-  hp: 20
-  mp: 20
   baseAttack: 5
   baseDefense: 2
-  attackModifier: 0
-  defenseModifier: 0
+  baseSpeed: 10
