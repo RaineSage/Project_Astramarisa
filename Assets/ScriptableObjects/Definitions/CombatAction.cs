@@ -46,6 +46,20 @@ namespace ScriptableObjects.Definitions
         Magic,
         True
     }
+
+    public enum ElementType
+    {
+        Neutral,
+        Wind,
+        Earth,
+        Water,
+        Fire,
+        Time,
+        Space,
+        Light,
+        Dark,
+        Poison
+    }
     
     [Serializable]
     public class PowerFactor
@@ -65,5 +79,6 @@ namespace ScriptableObjects.Definitions
 
         public PowerFactor[] powerFactors;
         public DamageType damageType;
+        public ElementType elementType;
     }
 }
