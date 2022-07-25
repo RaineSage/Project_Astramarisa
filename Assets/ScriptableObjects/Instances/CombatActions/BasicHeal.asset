@@ -12,5 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4212ccd1cbeacc741b7f52df93151d43, type: 3}
   m_Name: BasicHeal
   m_EditorClassIdentifier: 
-  power: 5
   actionType: 1
+  targetType: 1
+  targetSpread: 0
+  powerFactors:
+  - powerFactorType: 0
+    powerAmount: 8
+    statType: 0
+  damageType: 2

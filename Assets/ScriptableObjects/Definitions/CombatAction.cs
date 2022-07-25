@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ScriptableObjects.Definitions
 {
@@ -6,15 +8,62 @@ namespace ScriptableObjects.Definitions
     {
         Attack,
         Heal,
-        
-        [InspectorName(null)]
-        Count
+
+        [InspectorName(null)] Count
+    }
+
+    public enum TargetType
+    {
+        Enemy,
+        Ally
+    }
+
+    public enum TargetSpread
+    {
+        Single,
+        All
+    }
+
+    public enum StatType
+    {
+        None,
+        Attack,
+        Magic,
+        Defense,
+        Resistance,
+        Speed
+    }
+
+    public enum PowerFactorType
+    {
+        Flat,
+        Scaled
+    }
+
+    public enum DamageType
+    {
+        Physical,
+        Magic,
+        True
     }
     
+    [Serializable]
+    public class PowerFactor
+    {
+        public PowerFactorType powerFactorType;
+        public float powerAmount;
+        public StatType statType;
+    }
+
+
     [CreateAssetMenu(fileName = "CombatAction", menuName = "ScriptableObjects/CombatAction", order = 2)]
     public class CombatAction : ScriptableObject
     {
-        public int power;
         public CombatActionType actionType;
+        public TargetType targetType;
+        public TargetSpread targetSpread;
+
+        public PowerFactor[] powerFactors;
+        public DamageType damageType;
     }
 }

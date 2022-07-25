@@ -12,5 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4212ccd1cbeacc741b7f52df93151d43, type: 3}
   m_Name: BasicAttack
   m_EditorClassIdentifier: 
-  power: 0
   actionType: 0
+  targetType: 0
+  targetSpread: 0
+  powerFactors:
+  - powerFactorType: 0
+    powerAmount: 0
+    statType: 0
+  - powerFactorType: 1
+    powerAmount: 1
+    statType: 1
+  damageType: 0

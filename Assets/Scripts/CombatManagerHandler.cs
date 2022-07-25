@@ -89,9 +89,70 @@ public class CombatManagerHandler : MonoBehaviour
         Attack(attacker, defender, basicAttack);
     }
 
+    public int CalculatePower(CharacterCombatHandler user, CharacterCombatHandler target, CombatAction combatAction)
+    {
+        int power = 0;
+        foreach (PowerFactor powerFactor in combatAction.powerFactors)
+        {
+            switch (powerFactor.powerFactorType)
+            {
+                case PowerFactorType.Flat:
+                    power += (int) powerFactor.powerAmount;
+                    break;
+                case PowerFactorType.Scaled:
+                    int statToScale = 0;
+                    switch (powerFactor.statType)
+                    {
+                        case StatType.None:
+                            Debug.LogError("None stat type with scaled power should not happen.");
+                            break;
+                        case StatType.Attack:
+                            statToScale = user.GetAttack();
+                            break;
+                        case StatType.Magic:
+                            Debug.LogError("Magic stat type not yet implemented.");
+                            break;
+                        case StatType.Defense:
+                            statToScale = user.GetDefense();
+                            break;
+                        case StatType.Resistance:
+                            Debug.LogError("Resistance stat type not yet implemented.");
+                            break;
+                        case StatType.Speed:
+                            statToScale = user.GetSpeed();
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    power += (int) (statToScale * powerFactor.powerAmount);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        switch (combatAction.damageType)
+        {
+            case DamageType.Physical:
+                power -= target.GetDefense();
+                break;
+            case DamageType.Magic:
+                Debug.LogError("Magic damage type not yet implemented.");
+                break;
+            case DamageType.True:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        return Math.Max(power, 0);
+    }
+
     public void Attack(CharacterCombatHandler attacker, CharacterCombatHandler defender, CombatAction combatAction)
     {
-        int damage = Math.Max(0, combatAction.power + attacker.GetAttack() - defender.GetDefense());
+        int damage = CalculatePower(attacker, defender, combatAction);
+
         bool defenderIsDead = defender.TakeDamage(damage);
         Debug.Log($"{defender.stats.name} HP is at {defender.GetHp()}/{defender.GetMaxHp()}");
         if (defenderIsDead)
@@ -109,7 +170,7 @@ public class CombatManagerHandler : MonoBehaviour
 
     public void Heal(CharacterCombatHandler healer, CharacterCombatHandler target, CombatAction combatAction)
     {
-        int healingAmount = combatAction.power;
+        int healingAmount = CalculatePower(healer, target, combatAction);
         target.Heal(healingAmount);
         Debug.Log($"{target.stats.name} HP is at {target.GetHp()}/{target.GetMaxHp()}");
     }
