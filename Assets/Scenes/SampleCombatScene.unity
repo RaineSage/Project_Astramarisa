@@ -301,6 +301,7 @@ MonoBehaviour:
   rootCombatMenuOptions:
   - {fileID: 2058328239271830271, guid: f9783847102d8c14494197e1298c8fa4, type: 3}
   - {fileID: 7248331645874134692, guid: 382efd5d977f6974680d6f6f5f66b778, type: 3}
+  - {fileID: 7248331645874134692, guid: fa372a151ea72394f8cf69dd04755a71, type: 3}
   targetMenuOptionPrefab: {fileID: 7248331645874134692, guid: d4d8c7a4d9d4c0840a487cb499c246c0, type: 3}
   optionLocationNodes:
   - {fileID: 947432062}

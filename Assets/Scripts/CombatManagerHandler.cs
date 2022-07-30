@@ -193,6 +193,19 @@ public class CombatManagerHandler : MonoBehaviour
         Debug.Log($"{target.stats.name} HP is at {target.GetHp()}/{target.GetMaxHp()}");
     }
 
+    public void Buff(CharacterCombatHandler buffer, CharacterCombatHandler target, CombatActionBuff combatAction)
+    {
+        /*A little bit of a hack, but keep self buffs on the same time scale*/
+        if (target == buffer)
+        {
+            foreach (BuffPowerFactor buff in combatAction.buffPowerFactors)
+            {
+                buff.turnDuration += 1;
+            }
+        }
+        target.ApplyBuffs(combatAction.buffPowerFactors);
+    }
+
     public void OnPlayerVictory()
     {
         /*PLACEHOLDER*/

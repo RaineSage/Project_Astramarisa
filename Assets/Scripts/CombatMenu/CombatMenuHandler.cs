@@ -68,10 +68,10 @@ namespace CombatMenu
 
                     ClearMenu();
 
-                    List<CharacterCombatHandler> targets = _playerTurn.CombatAction switch
+                    List<CharacterCombatHandler> targets = _playerTurn.CombatAction.targetType switch
                     {
-                        CombatActionAttack => CombatManagerHandler.Instance.GetEnemyCharacters(),
-                        CombatActionHeal => new List<CharacterCombatHandler>()
+                        TargetType.Enemy => CombatManagerHandler.Instance.GetEnemyCharacters(),
+                        TargetType.Ally => new List<CharacterCombatHandler>()
                         {
                             CombatManagerHandler.Instance.GetMainPlayerCharacter()
                         },

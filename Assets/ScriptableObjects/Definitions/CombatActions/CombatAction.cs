@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ScriptableObjects.Definitions.CombatActions
 {
@@ -30,7 +31,8 @@ namespace ScriptableObjects.Definitions.CombatActions
         Magic,
         Defense,
         Resistance,
-        Speed
+        Speed,
+        Luck
     }
 
     public enum PowerFactorType
@@ -66,6 +68,16 @@ namespace ScriptableObjects.Definitions.CombatActions
         public PowerFactorType powerFactorType;
         public float powerAmount;
         public StatType statType;
+    }
+
+    // Left as separate from damage/heal power factors in case of deviation in the future
+    [Serializable]
+    public class BuffPowerFactor
+    {
+        public PowerFactorType powerFactorType;
+        public float powerAmount;
+        public StatType statType;
+        public int turnDuration;
     }
 
     

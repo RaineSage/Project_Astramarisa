@@ -30,6 +30,7 @@ namespace CharacterCombatHandlers
         public override void OnTurnEnd()
         {
             _shouldAct = false;
+            base.OnTurnEnd();
             CombatManagerHandler.Instance.PassTurn();
         }
 

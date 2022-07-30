@@ -37,13 +37,19 @@ namespace ControlHandlers
                         enemyCombatHandler, combatActionAttack);
                     break;
                 case CombatActionHeal combatActionHeal:
-                    CombatManagerHandler.Instance.Heal(_playerCombatHandler, _playerCombatHandler,
+                    Debug.Assert(combatActionTurn.Targets.Count == 1);
+                    CombatManagerHandler.Instance.Heal(_playerCombatHandler, combatActionTurn.Targets[0],
                         combatActionHeal);
+                    break;
+                case CombatActionBuff combatActionBuff:
+                    Debug.Assert(combatActionTurn.Targets.Count == 1);
+                    CombatManagerHandler.Instance.Buff(_playerCombatHandler, combatActionTurn.Targets[0],
+                        combatActionBuff);
                     break;
             }
 
             _playerCombatHandler.canAct = false;
-            
+
             _combatMenuHandler.OnEndTurn();
             _playerCombatHandler.OnTurnEnd();
         }

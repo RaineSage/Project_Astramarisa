@@ -15,6 +15,7 @@ namespace CharacterCombatHandlers
         public override void OnTurnEnd()
         {
             canAct = false;
+            base.OnTurnEnd();
             CombatManagerHandler.Instance.PassTurn();
         }
 
