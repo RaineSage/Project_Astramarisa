@@ -112,13 +112,13 @@ public class CombatManagerHandler : MonoBehaviour
                             statToScale = user.GetAttack();
                             break;
                         case StatType.Magic:
-                            Debug.LogError("Magic stat type not yet implemented.");
+                            statToScale = user.GetMagicAttack();
                             break;
                         case StatType.Defense:
                             statToScale = user.GetDefense();
                             break;
                         case StatType.Resistance:
-                            Debug.LogError("Resistance stat type not yet implemented.");
+                            statToScale = user.GetResistance();
                             break;
                         case StatType.Speed:
                             statToScale = user.GetSpeed();
@@ -147,7 +147,7 @@ public class CombatManagerHandler : MonoBehaviour
                 basePower -= target.GetDefense();
                 break;
             case DamageType.Magic:
-                Debug.LogError("Magic damage type not yet implemented.");
+                basePower -= target.GetResistance();
                 break;
             case DamageType.True:
                 break;

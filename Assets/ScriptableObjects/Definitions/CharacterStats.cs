@@ -13,6 +13,9 @@ namespace ScriptableObjects.Definitions
         public int baseAttack;
         public int baseDefense;
 
+        public int baseMagic;
+        public int baseResistance;
+        
         public int baseSpeed;
     }
 }

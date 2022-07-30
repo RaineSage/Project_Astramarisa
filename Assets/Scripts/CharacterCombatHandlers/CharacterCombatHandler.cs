@@ -88,5 +88,15 @@ namespace CharacterCombatHandlers
         {
             return stats.name;
         }
+
+        public int GetMagicAttack()
+        {
+            return stats.baseMagic;
+        }
+
+        public int GetResistance()
+        {
+            return stats.baseResistance;
+        }
     }
 }
