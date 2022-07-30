@@ -4,8 +4,10 @@ using System.Linq;
 using CharacterCombatHandlers;
 using JetBrains.Annotations;
 using ScriptableObjects.Definitions;
+using ScriptableObjects.Definitions.CombatActions;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using CombatActionAttack = ScriptableObjects.Definitions.CombatActions.CombatActionAttack;
 
 public class CombatManagerHandler : MonoBehaviour
 {
@@ -23,7 +25,7 @@ public class CombatManagerHandler : MonoBehaviour
         }
     }
 
-    public CombatAction basicAttack;
+    public CombatActionAttack basicAttack;
 
     private readonly List<CharacterCombatHandler> _combatHandlers = new List<CharacterCombatHandler>();
     private int _turnIndex;
@@ -89,10 +91,10 @@ public class CombatManagerHandler : MonoBehaviour
         Attack(attacker, defender, basicAttack);
     }
 
-    public int CalculatePower(CharacterCombatHandler user, CharacterCombatHandler target, CombatAction combatAction)
+    public int CalculateBasePower(CharacterCombatHandler user, CharacterCombatHandler target, PowerFactor[] powerFactors)
     {
         int power = 0;
-        foreach (PowerFactor powerFactor in combatAction.powerFactors)
+        foreach (PowerFactor powerFactor in powerFactors)
         {
             switch (powerFactor.powerFactorType)
             {
@@ -132,10 +134,17 @@ public class CombatManagerHandler : MonoBehaviour
             }
         }
 
-        switch (combatAction.damageType)
+        return power;
+    }
+
+
+    public int CalculateResistances(CharacterCombatHandler user, CharacterCombatHandler target,
+        int basePower, DamageType damageType)
+    {
+        switch (damageType)
         {
             case DamageType.Physical:
-                power -= target.GetDefense();
+                basePower -= target.GetDefense();
                 break;
             case DamageType.Magic:
                 Debug.LogError("Magic damage type not yet implemented.");
@@ -146,13 +155,21 @@ public class CombatManagerHandler : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
 
-        return Math.Max(power, 0);
+        return Math.Max(basePower, 0);
     }
 
-    public void Attack(CharacterCombatHandler attacker, CharacterCombatHandler defender, CombatAction combatAction)
+    public int NonNegativePower(int basePower)
     {
-        int damage = CalculatePower(attacker, defender, combatAction);
+        return Math.Max(basePower, 0);
+    }
+    
 
+    public void Attack(CharacterCombatHandler attacker, CharacterCombatHandler defender, CombatActionAttack combatAction)
+    {
+        int damage = CalculateBasePower(attacker, defender, combatAction.damageFactors);
+        damage = CalculateResistances(attacker, defender, damage, combatAction.damageType);
+        damage = NonNegativePower(damage);
+        
         bool defenderIsDead = defender.TakeDamage(damage);
         Debug.Log($"{defender.stats.name} HP is at {defender.GetHp()}/{defender.GetMaxHp()}");
         if (defenderIsDead)
@@ -168,9 +185,10 @@ public class CombatManagerHandler : MonoBehaviour
         }
     }
 
-    public void Heal(CharacterCombatHandler healer, CharacterCombatHandler target, CombatAction combatAction)
+    public void Heal(CharacterCombatHandler healer, CharacterCombatHandler target, CombatActionHeal combatAction)
     {
-        int healingAmount = CalculatePower(healer, target, combatAction);
+        int healingAmount = CalculateBasePower(healer, target, combatAction.healFactors);
+        healingAmount = NonNegativePower(healingAmount);
         target.Heal(healingAmount);
         Debug.Log($"{target.stats.name} HP is at {target.GetHp()}/{target.GetMaxHp()}");
     }

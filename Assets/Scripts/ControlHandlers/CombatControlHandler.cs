@@ -1,10 +1,8 @@
 using CharacterCombatHandlers;
 using CombatMenu;
-using ScriptableObjects.Definitions;
+using ScriptableObjects.Definitions.CombatActions;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace ControlHandlers
 {
@@ -30,17 +28,17 @@ namespace ControlHandlers
             CombatActionTurn combatActionTurn = _combatMenuHandler.SelectOption();
             if (!combatActionTurn.IsComplete) return;
 
-            switch (combatActionTurn.CombatAction.actionType)
+            switch (combatActionTurn.CombatAction)
             {
-                case CombatActionType.Attack:
+                case CombatActionAttack combatActionAttack:
                     Debug.Assert(combatActionTurn.Targets.Count == 1);
                     CharacterCombatHandler enemyCombatHandler = combatActionTurn.Targets[0];
                     CombatManagerHandler.Instance.Attack(_playerCombatHandler,
-                        enemyCombatHandler, combatActionTurn.CombatAction);
+                        enemyCombatHandler, combatActionAttack);
                     break;
-                case CombatActionType.Heal:
+                case CombatActionHeal combatActionHeal:
                     CombatManagerHandler.Instance.Heal(_playerCombatHandler, _playerCombatHandler,
-                        combatActionTurn.CombatAction);
+                        combatActionHeal);
                     break;
             }
 

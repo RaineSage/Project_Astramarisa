@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using CharacterCombatHandlers;
 using JetBrains.Annotations;
 using ScriptableObjects.Definitions;
+using ScriptableObjects.Definitions.CombatActions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
+using CombatActionAttack = ScriptableObjects.Definitions.CombatActions.CombatActionAttack;
 using Debug = System.Diagnostics.Debug;
 
 namespace CombatMenu
@@ -66,21 +68,15 @@ namespace CombatMenu
 
                     ClearMenu();
 
-                    List<CharacterCombatHandler> targets;
-                    switch (_playerTurn.CombatAction.actionType)
+                    List<CharacterCombatHandler> targets = _playerTurn.CombatAction switch
                     {
-                        case CombatActionType.Attack:
-                            targets = CombatManagerHandler.Instance.GetEnemyCharacters();
-                            break;
-                        case CombatActionType.Heal:
-                            targets = new List<CharacterCombatHandler>()
-                            {
-                                CombatManagerHandler.Instance.GetMainPlayerCharacter()
-                            };
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                        CombatActionAttack => CombatManagerHandler.Instance.GetEnemyCharacters(),
+                        CombatActionHeal => new List<CharacterCombatHandler>()
+                        {
+                            CombatManagerHandler.Instance.GetMainPlayerCharacter()
+                        },
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
 
                     List<CombatMenuTargetHandler> targetMenuOptions = new List<CombatMenuTargetHandler>();
 

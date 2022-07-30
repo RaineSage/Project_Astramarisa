@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace ScriptableObjects.Definitions
+namespace ScriptableObjects.Definitions.CombatActions
 {
     public enum CombatActionType
     {
@@ -69,16 +68,13 @@ namespace ScriptableObjects.Definitions
         public StatType statType;
     }
 
-
-    [CreateAssetMenu(fileName = "CombatAction", menuName = "ScriptableObjects/CombatAction", order = 2)]
+    
     public class CombatAction : ScriptableObject
     {
-        public CombatActionType actionType;
         public TargetType targetType;
         public TargetSpread targetSpread;
 
-        public PowerFactor[] powerFactors;
-        public DamageType damageType;
         public ElementType elementType;
     }
+
 }

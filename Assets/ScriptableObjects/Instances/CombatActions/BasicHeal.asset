@@ -9,14 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4212ccd1cbeacc741b7f52df93151d43, type: 3}
+  m_Script: {fileID: 11500000, guid: e9a4679588d76314ca12500eab0d9c34, type: 3}
   m_Name: BasicHeal
-  m_EditorClassIdentifier: 
-  actionType: 1
+  m_EditorClassIdentifier: Assembly-CSharp:ScriptableObjects.Definitions:CombatActionHeal
   targetType: 1
   targetSpread: 0
-  powerFactors:
+  elementType: 0
+  healFactors:
   - powerFactorType: 0
-    powerAmount: 8
+    powerAmount: 5
     statType: 0
-  damageType: 2

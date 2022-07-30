@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4212ccd1cbeacc741b7f52df93151d43, type: 3}
+  m_Script: {fileID: 11500000, guid: 18608a1f4391fb04095f32b57bd2512e, type: 3}
   m_Name: BasicAttack
-  m_EditorClassIdentifier: 
-  actionType: 0
+  m_EditorClassIdentifier: Assembly-CSharp:ScriptableObjects.Definitions:CombatActionAttack
   targetType: 0
   targetSpread: 0
-  powerFactors:
-  - powerFactorType: 0
-    powerAmount: 0
-    statType: 0
+  elementType: 0
+  damageFactors:
   - powerFactorType: 1
     powerAmount: 1
     statType: 1
+  - powerFactorType: 0
+    powerAmount: 2
+    statType: 0
   damageType: 0
