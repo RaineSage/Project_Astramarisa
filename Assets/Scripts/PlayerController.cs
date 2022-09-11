@@ -37,16 +37,12 @@ public class PlayerController : MonoBehaviour
         m_rigidbody.velocity = direction;
 
         direction.y = 0;
-
-        Debug.Log(m_isGrounded);
-
     }
 
     private void Jump()
     {
         if(Input.GetKeyDown(KeyCode.Space) && m_isGrounded && !m_isInAir)
         {
-            Debug.Log(m_isGrounded);
             m_rigidbody.AddForce(Vector2.up * m_jumpForce, ForceMode2D.Impulse);
 
             m_isGrounded = false;
@@ -56,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D _col)
     {
-        if (_col.gameObject.tag == "Floor")
+        if (_col.gameObject.layer == 6)
         {
           m_isGrounded = true;
           m_isInAir = false;
