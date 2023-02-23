@@ -1,24 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
 
     [SerializeField]
     private float m_movementSpeed = 5f;
     [SerializeField]
-    private float m_jumpForce = 10f;
+    private float m_jumpForce = 5f;
+    [SerializeField]
+    private LayerMask m_groundLayer;
 
+    [SerializeField] 
+    private Transform m_groundCheck;
+
+    [SerializeField] 
+    private SpriteRenderer m_sprite;
+    
     private bool m_isGrounded = false;
-    private bool m_isInAir = true;
-
-    private Rigidbody2D m_rigidbody;
+    private Rigidbody m_rigidbody;
 
     void Awake()
     {
-        m_rigidbody = GetComponent<Rigidbody2D>();
+        m_rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -31,31 +38,47 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         Vector2 direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        direction = direction.normalized * m_movementSpeed;
+        direction = direction.normalized;
 
-        direction.y = m_rigidbody.velocity.y;
-        m_rigidbody.velocity = direction;
+        m_rigidbody.velocity = new Vector3(direction.x * m_movementSpeed, m_rigidbody.velocity.y ,direction.y*m_movementSpeed);
 
-        direction.y = 0;
+
+        if (!m_sprite.flipX && direction.x < 0)
+        {
+            m_sprite.flipX = true;
+        }
+        else if (m_sprite.flipX && direction.x > 0)
+        {
+            m_sprite.flipX = false;
+        }
     }
 
     private void Jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && m_isGrounded && !m_isInAir)
+        RaycastHit hit;
+        
+        if(Physics.Raycast(m_groundCheck.position, Vector3.down, out hit, 3f, m_groundLayer))
         {
-            m_rigidbody.AddForce(Vector2.up * m_jumpForce, ForceMode2D.Impulse);
-
+            m_isGrounded = true;
+        }
+        else
+        {
             m_isGrounded = false;
-            m_isInAir = true;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Space) && m_isGrounded)
+        {
+            m_rigidbody.velocity += new Vector3(0f, m_jumpForce, 0f);
         }
     }
 
-    private void OnCollisionStay2D(Collision2D _col)
+    private void OnCollisionStay(Collision _col)
     {
-        if (_col.gameObject.layer == 6)
-        {
-          m_isGrounded = true;
-          m_isInAir = false;
-        }
+        //if (_col.gameObject.layer == 6)
+        //{
+        //  m_isGrounded = true;
+        //  m_isInAir = false;
+        //}
     }
 }
